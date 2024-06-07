@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import AppHeader from "./components/AppHeader";
+import Search from "./components/Search";
 
-function App() {
+export default function App() {
+  const [watchedList, setWatchedList] = useState(() => {
+    const localWatchedList = localStorage.getItem("watchedList");
+    return localWatchedList ? JSON.parse(localWatchedList) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("watchedList", JSON.stringify(watchedList));
+  }, [watchedList]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AppHeader watchedList={watchedList} setWatchedList={setWatchedList} />
+      <main>
+        <Search watchedList={watchedList} setWatchedList={setWatchedList} />
+      </main>
     </div>
   );
 }
-
-export default App;
